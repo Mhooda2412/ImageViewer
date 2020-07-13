@@ -11,6 +11,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -43,7 +44,9 @@ class Login extends Component {
             username: '',
             password: '',
             usernameRequired: 'dispNone',
-            passwordRequired: 'dispNone'
+            passwordRequired: 'dispNone',
+            incorrectUsernamePassword: 'dispNone',
+            isLogin:false
         }
     }
 
@@ -56,14 +59,37 @@ class Login extends Component {
     }
 
     loginClickHandler = () => {
-        this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
-        this.state.password === "" ? this.setState({ passwordRequired: "dispBlock" }) : this.setState({ passwordRequired: "dispNone" });
+
+        let username = "Mhooda2412"
+        let password = "MHooda123"
+        let access_token = 'IGQVJWcWZAkVnZAlM2VfdkxDT2t3TzlhUnNMSHVKWlI2dXowN1pDdWl1WHk1VV9tX2xQbkJtTEJGRlhnYnVRWjh1NTlsX3hra29TZAVBCalFyWWZA5eE0tMVhDRUhxYnJTWTJWMkI3YW13'
+
+
+        if (this.state.username === '' || this.state.password === '') {
+            this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
+            this.state.password === "" ? this.setState({ passwordRequired: "dispBlock" }) : this.setState({ passwordRequired: "dispNone" });
+            this.setState({ incorrectUsernamePassword: 'dispNone' })
+        }
+
+        else if (username !== this.state.username || password !== this.state.password) {
+            return this.setState({
+                incorrectUsernamePassword: 'dispBlock',
+                usernameRequired: 'dispNone',
+                passwordRequired: 'dispNone'
+            })
+        }
+        else {
+            this.setState({isLogin:true})
+            sessionStorage.setItem('access_token',access_token)
+        }
+
     }
 
     render() {
         const { classes } = this.props
         return (
             <div>
+                {this.state.isLogin?<Redirect to='/home'/> :<div>
                 <Header />
                 <Card className={classes.root}>
                     <CardContent >
@@ -80,10 +106,14 @@ class Login extends Component {
                             <Input id="password" type="password" className={classes.input} fullWidth={true} onChange={this.passwordChangeHandler} />
                             <FormHelperText className={this.state.passwordRequired}><span className="red">required</span></FormHelperText>
                         </FormControl><br /><br /><br></br>
+                        <FormHelperText className={this.state.incorrectUsernamePassword}><span className="red" style={{ fontSize: "14px" }}>Incorrect username and/or password</span></FormHelperText>
+                        <br />
                         <Button variant="contained" color="primary" onClick={this.loginClickHandler} >LOGIN</Button>
                     </CardContent>
                 </Card>
+            </div>}
             </div>
+            
         )
     }
 }
