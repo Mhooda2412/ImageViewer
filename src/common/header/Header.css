@@ -19,6 +19,14 @@
 }
 
 
-input{
-    margin-right: 40px;
+
+.header-searchbox{
+
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    background-color: #c0c0c0;
+    border-radius: 4px;
+    
 }
