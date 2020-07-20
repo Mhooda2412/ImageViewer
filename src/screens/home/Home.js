@@ -16,7 +16,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <Header showSearchBox={this.state.isLogin ? true : false} />
+                <Header showSearchBox={this.state.isLogin ? true : false} showProfileIcon={this.state.isLogin ? true : false} />
                 <div>Home Page</div>
 
             </div>

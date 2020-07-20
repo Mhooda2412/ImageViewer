@@ -30,3 +30,26 @@
     border-radius: 4px;
     
 }
+
+.header-searchbox-off{
+    margin-left: auto;
+}
+
+/* .profile-icon{
+    margin-left: 30px;
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border: solid;
+    border-color: white;
+    overflow: hidden;
+    border-width: thin;
+    margin-right:15px ;
+
+}
+
+.profile-picture{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+} */
