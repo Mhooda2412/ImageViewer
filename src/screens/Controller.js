@@ -6,16 +6,17 @@ import Home from './home/Home'
 
 
 class Controller extends Component {
-    constructor(){
+    constructor() {
         super()
-        this.baseUrl = 'https://graph.instagram.com'
+        this.baseUrl = 'https://graph.instagram.com/'
     }
     render() {
         return (
             <Router>
                 {/* Route to login screen */}
-                <Route exact path='/' render={(props)=><Login {...props} />} />
-        <Route exact path='/home' render={(props)=><Home {...props} baseUrl={this.baseUrl }/>} />
+                <Route exact path='/' render={(props) => <Login {...props} />} />
+                {/* Route to home screen */}
+                <Route exact path='/home' render={(props) => <Home {...props} baseUrl={this.baseUrl} />} />
             </Router>
         )
     }
