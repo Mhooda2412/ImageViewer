@@ -13,6 +13,10 @@ import CardMedia from '@material-ui/core/CardMedia'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import IconButton from '@material-ui/core/IconButton'
+import FormControl from "@material-ui/core/FormControl";
+import InputLable from '@material-ui/core/InputLabel'
+import Input from '@material-ui/core/Input'
+import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
@@ -44,6 +48,16 @@ const styles = (theme) => ({
     },
     likeButton:{
         'padding-left': '0px'
+    },
+    addCommentBtn: { // ADD button styling 
+        "margin-left": "15px",
+    },
+
+    comment: { //for the form control
+        "flex-direction": "row",
+        "margin-top": "25px",
+        "align-items": "baseline",
+        "justify-content": "center",
     }
 })
 
@@ -55,8 +69,10 @@ class Home extends Component {
             isLogin: sessionStorage.getItem("access_token") === null ? false : true,
             access_token: sessionStorage.getItem("access_token"),
             user_id: sessionStorage.getItem('user_id'),
-            images: []
-
+            images: [],
+            comments:[],
+            comment:"",
+            commentCount:1
 
         }
     }
@@ -146,6 +162,38 @@ class Home extends Component {
 
     }
 
+    commentTextChangeHandler=(event,imageId)=>{
+        let comment = {
+            id:imageId,
+            commentText:event.target.value
+        }
+        this.setState({
+            comment
+        })
+
+       
+
+    } 
+
+    addCommentHandler(){
+        let count = this.state.commentCount
+        let comment = {
+            id:count,
+            imageId:this.state.comment.id,
+            username:this.state.username,
+            commentText:this.state.comment.commentText
+        }
+        count++
+        let comments = [...this.state.comments,comment]
+        this.setState({
+            comments,
+            count,
+            comment:""
+        })
+        console.log(this.state)
+
+    }
+
     render() {
 
         const { classes } = this.props
@@ -197,6 +245,17 @@ class Home extends Component {
                                                         {image.likes} likes
                                                 </span>
                                                 }
+
+
+                                        <FormControl className={classes.comment} fullWidth={true}>
+
+                                            <InputLable htmlFor={"Addcomment"+image.id}>Add a comment</InputLable>
+                                            <Input id={"Addcomment"+image.id} className="comment-text" onChange={(event)=>this.commentTextChangeHandler(event,image.id)}></Input>
+                                            <Button variant="contained" color="primary" className={classes.addCommentBtn} onClick={this.addCommentHandler.bind(this)} >Add</Button>
+
+
+                                        </FormControl>        
+
 
                                     </CardContent>
 
