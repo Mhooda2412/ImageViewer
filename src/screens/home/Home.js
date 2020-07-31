@@ -193,7 +193,7 @@ class Home extends Component {
         let comments = [...this.state.comments, comment]
         this.setState({
             comments,
-            count,
+            commentCount:count,
             comment: ""
         })
 
@@ -289,7 +289,7 @@ class Home extends Component {
                                         }
 
                                         {this.state.comments.map(comment => (
-                                            image.id === comment.imageId ? <div className="comment-display" key={comment.id}>
+                                            image.id === comment.imageId ? <div className="comment-display" key={"comment"+comment.id}>
                                                 <Typography variant="subtitle2" className={classes.commentUsername} gutterbottom="true" >
                                                     {comment.username}:
                                             </Typography>
