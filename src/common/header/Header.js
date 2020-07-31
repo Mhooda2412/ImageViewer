@@ -41,13 +41,14 @@ const styles = (theme) => ({
     profileImage: {
         height: '100%',
         width: '100%',
-        borderRadius: '50%'
+        borderRadius: '50%',
     },
     menuList: {
         "width": "145px",
         padding: "0px",
         marginRight: '0px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        'background-color': '#c0c0c0'
 
     },
     menuItems: {
