@@ -238,7 +238,7 @@ class Home extends Component {
     render() {
 
         const { classes } = this.props
-        console.log(this.state)
+       
         return (
             <div >
                 <Header showSearchBox={this.state.isLogin ? true : false} showProfileIcon={this.state.isLogin ? true : false} showMyAccount={this.state.isLogin ? true : false} captionSearchHandler={this.captionSearchHandler} />
