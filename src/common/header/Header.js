@@ -12,7 +12,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { withStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link , Redirect } from 'react-router-dom';
 
 
 
@@ -41,12 +41,14 @@ const styles = (theme) => ({
     profileImage: {
         height: '100%',
         width: '100%',
-        borderRadius: '50%'
+        borderRadius: '50%',
     },
     menuList: {
-        "width": "150px",
+        "width": "145px",
         padding: "0px",
-        marginRight: '0px'
+        marginRight: '0px',
+        overflow: 'hidden',
+        'background-color': '#c0c0c0'
 
     },
     menuItems: {
@@ -55,7 +57,7 @@ const styles = (theme) => ({
         "text-decoration-underline": "none",
         marginRight: '0px',
         paddingRight: '0px',
-        width: 'fit-content'
+        
     }
 
 })
@@ -67,7 +69,8 @@ class Header extends Component {
     constructor() {
         super()
         this.state = {
-            isMenuOpen: false
+            isMenuOpen: false,
+            isLogin: sessionStorage.getItem("access_token") === null ? false : true
         }
 
         this.anchorRef = React.createRef(false)
@@ -85,6 +88,28 @@ class Header extends Component {
         this.profileIconClickHandler()
     }
 
+    searchChangeHandler = (event)=>{
+                
+                this.props.captionSearchHandler(event.target.value)
+
+    }
+
+    logoutButtonHandler = ()=>{
+        sessionStorage.removeItem("access_token")
+        sessionStorage.removeItem("user_id")
+        this.setState({
+            isLogin:false
+        })
+    } 
+
+    redirectToLogin = () => {
+        if (!this.state.isLogin) {
+           return <Redirect to = "/"/>
+        }else{
+            return <Redirect to="/home"></Redirect>
+        }
+    }
+
     render() {
 
         const { classes } = this.props
@@ -92,13 +117,15 @@ class Header extends Component {
         return (
 
 
+
             <div>
+                {this.redirectToLogin()}
                 <header className="app-header">
                     <div className="app-logo">Image Viewer</div>
                     {this.props.showSearchBox ?
                         <div className="header-searchbox">
                             <SearchIcon id="search-icon"></SearchIcon>
-                            <Input placeholder="Search…" disableUnderline={true}></Input>
+                            <Input placeholder="Search…" disableUnderline={true} onChange={this.searchChangeHandler}></Input>
                         </div> : <div className="header-searchbox-off"></div>}
                     {this.props.showProfileIcon ?
                         <div>
@@ -123,7 +150,7 @@ class Header extends Component {
                                                     <div className="horizontal-line"> </div>
                                                     </div>
                                                     :""}
-                                                        <MenuItem className={classes.menuItems} onClick={this.handleClose}>Logout</MenuItem>
+                                                        <MenuItem className={classes.menuItems} onClick={this.logoutButtonHandler}>Logout</MenuItem>
                                                     </MenuList>
                                                 </ClickAwayListener>
                                             </Paper>
