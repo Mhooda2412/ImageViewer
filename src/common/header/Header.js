@@ -85,6 +85,12 @@ class Header extends Component {
         this.profileIconClickHandler()
     }
 
+    searchChangeHandler = (event)=>{
+                
+                this.props.captionSearchHandler(event.target.value)
+
+    }
+
     render() {
 
         const { classes } = this.props
@@ -98,7 +104,7 @@ class Header extends Component {
                     {this.props.showSearchBox ?
                         <div className="header-searchbox">
                             <SearchIcon id="search-icon"></SearchIcon>
-                            <Input placeholder="Search…" disableUnderline={true}></Input>
+                            <Input placeholder="Search…" disableUnderline={true} onChange={this.searchChangeHandler}></Input>
                         </div> : <div className="header-searchbox-off"></div>}
                     {this.props.showProfileIcon ?
                         <div>

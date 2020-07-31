@@ -76,7 +76,9 @@ class Home extends Component {
             images: [],
             comments: [],
             comment: "",
-            commentCount: 1
+            commentCount: 1,
+            searchOn: false,
+            originalImageArr: {}
 
         }
     }
@@ -198,13 +200,48 @@ class Home extends Component {
 
     }
 
+    captionSearchHandler = (keyword)=>{
+        if(!(keyword==='')){
+            let originalImageArr = []
+            this.state.searchOn?originalImageArr = this.state.originalImageArr:originalImageArr=this.state.images
+            let updatedImageArr = []
+            var searchOn = true
+            keyword = keyword.toLowerCase()
+            originalImageArr.forEach((image)=>{
+                let caption = image.caption[0].toLowerCase()
+                if(caption.includes(keyword)){
+                    updatedImageArr.push(image)
+                }
+
+            })
+            if(!this.state.searchOn){
+                this.setState({
+                    searchOn,
+                    images:updatedImageArr,
+                    originalImageArr
+                })
+            }else{
+                this.setState({
+                    images:updatedImageArr
+                })
+            }
+        }else{
+            searchOn = false
+            this.setState({
+                searchOn,
+                images:this.state.originalImageArr,
+                originalImageArr:[]
+            })
+        }
+    }
+
     render() {
 
         const { classes } = this.props
         console.log(this.state)
         return (
             <div >
-                <Header showSearchBox={this.state.isLogin ? true : false} showProfileIcon={this.state.isLogin ? true : false} showMyAccount={this.state.isLogin ? true : false} />
+                <Header showSearchBox={this.state.isLogin ? true : false} showProfileIcon={this.state.isLogin ? true : false} showMyAccount={this.state.isLogin ? true : false} captionSearchHandler={this.captionSearchHandler} />
 
                 <div className="flex-container">
                     <Grid container spacing={3} wrap="wrap" alignContent="center" className={classes.grid}>
