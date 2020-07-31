@@ -17,6 +17,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLable from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
 import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
@@ -46,7 +47,7 @@ const styles = (theme) => ({
     title: { //Style for the title of the card 
         'font-weight': '600',
     },
-    likeButton:{
+    likeButton: {
         'padding-left': '0px'
     },
     addCommentBtn: { // ADD button styling 
@@ -58,6 +59,9 @@ const styles = (theme) => ({
         "margin-top": "25px",
         "align-items": "baseline",
         "justify-content": "center",
+    },
+    commentUsername: {
+        fontSize: 'inherit'
     }
 })
 
@@ -70,9 +74,9 @@ class Home extends Component {
             access_token: sessionStorage.getItem("access_token"),
             user_id: sessionStorage.getItem('user_id'),
             images: [],
-            comments:[],
-            comment:"",
-            commentCount:1
+            comments: [],
+            comment: "",
+            commentCount: 1
 
         }
     }
@@ -124,7 +128,7 @@ class Home extends Component {
 
 
                     })
-                    console.log(that.state);
+
 
 
                 }
@@ -137,23 +141,23 @@ class Home extends Component {
         }
     }
 
-    likeBtnHandler = (imageId)=>{
+    likeBtnHandler = (imageId) => {
         let imageArr = this.state.images
-        for(let i=0;i<imageArr.length;i++){
-            if(imageArr[i].id === imageId){
-                if(imageArr[i].isLiked === true){
-                    imageArr[i].isLiked =false
+        for (let i = 0; i < imageArr.length; i++) {
+            if (imageArr[i].id === imageId) {
+                if (imageArr[i].isLiked === true) {
+                    imageArr[i].isLiked = false
                     imageArr[i].likes--
                     this.setState({
-                        images:imageArr
+                        images: imageArr
                     })
                     break
                 }
-                else{
+                else {
                     imageArr[i].isLiked = true
                     imageArr[i].likes++
                     this.setState({
-                        images:imageArr
+                        images: imageArr
                     })
                     break
                 }
@@ -162,41 +166,42 @@ class Home extends Component {
 
     }
 
-    commentTextChangeHandler=(event,imageId)=>{
+    commentTextChangeHandler = (event, imageId) => {
         let comment = {
-            id:imageId,
-            commentText:event.target.value
+            id: imageId,
+            commentText: event.target.value
         }
         this.setState({
             comment
         })
 
-       
 
-    } 
 
-    addCommentHandler(){
+    }
+
+    addCommentHandler = () => {
         let count = this.state.commentCount
         let comment = {
-            id:count,
-            imageId:this.state.comment.id,
-            username:this.state.username,
-            commentText:this.state.comment.commentText
+            id: count,
+            imageId: this.state.comment.id,
+            username: this.state.username,
+            commentText: this.state.comment.commentText
         }
         count++
-        let comments = [...this.state.comments,comment]
+        let comments = [...this.state.comments, comment]
         this.setState({
             comments,
             count,
-            comment:""
+            comment: ""
         })
-        console.log(this.state)
+
 
     }
 
     render() {
 
         const { classes } = this.props
+        console.log(this.state)
         return (
             <div >
                 <Header showSearchBox={this.state.isLogin ? true : false} showProfileIcon={this.state.isLogin ? true : false} showMyAccount={this.state.isLogin ? true : false} />
@@ -234,27 +239,39 @@ class Home extends Component {
                                             {image.caption[1]}
                                         </div>
                                         <IconButton className={classes.likeButton} aria-label="like-button" onClick={() => this.likeBtnHandler(image.id)}>
-                                            {image.isLiked ? <FavoriteIcon fontSize="large" style={{color:'red'}}></FavoriteIcon> : <FavoriteBorderIcon fontSize='large'></FavoriteBorderIcon>}
+                                            {image.isLiked ? <FavoriteIcon fontSize="large" style={{ color: 'red' }}></FavoriteIcon> : <FavoriteBorderIcon fontSize='large'></FavoriteBorderIcon>}
                                         </IconButton>
 
                                         {image.likes === 1 ?
-                                                    <span className="like-count">
-                                                        {image.likes} like
+                                            <span className="like-count">
+                                                {image.likes} like
                                                 </span>
-                                                    : <span className="like-count">
-                                                        {image.likes} likes
+                                            : <span className="like-count">
+                                                {image.likes} likes
                                                 </span>
-                                                }
+                                        }
+
+                                        {this.state.comments.map(comment => (
+                                            image.id === comment.imageId ? <div className="comment-display" key={comment.id}>
+                                                <Typography variant="subtitle2" className={classes.commentUsername} gutterbottom="true" >
+                                                    {comment.username}:
+                                            </Typography>
+                                                <Typography variant="body1" className="comment-text" gutterbottom="true">
+                                                    {comment.commentText}
+                                                </Typography>
+                                            </div>
+                                                : ""
+                                        ))}
 
 
                                         <FormControl className={classes.comment} fullWidth={true}>
 
-                                            <InputLable htmlFor={"Addcomment"+image.id}>Add a comment</InputLable>
-                                            <Input id={"Addcomment"+image.id} className="comment-text" onChange={(event)=>this.commentTextChangeHandler(event,image.id)}></Input>
+                                            <InputLable htmlFor={"Addcomment" + image.id}>Add a comment</InputLable>
+                                            <Input id={"Addcomment" + image.id} className="comment-text" onChange={(event) => this.commentTextChangeHandler(event, image.id)} value={image.id === this.state.comment.id ? this.state.comment.commentText : ""}></Input>
                                             <Button variant="contained" color="primary" className={classes.addCommentBtn} onClick={this.addCommentHandler.bind(this)} >Add</Button>
 
 
-                                        </FormControl>        
+                                        </FormControl>
 
 
                                     </CardContent>

@@ -31,3 +31,9 @@
     padding-left:10px;
     width:100%;
 }
+
+.comment-display{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
