@@ -63,7 +63,7 @@ class Login extends Component {
         let username = "Mhooda2412"
         let password = "MHooda123"
         let access_token = 'IGQVJWcWZAkVnZAlM2VfdkxDT2t3TzlhUnNMSHVKWlI2dXowN1pDdWl1WHk1VV9tX2xQbkJtTEJGRlhnYnVRWjh1NTlsX3hra29TZAVBCalFyWWZA5eE0tMVhDRUhxYnJTWTJWMkI3YW13'
-
+        let user_id = '17841439211805628'
 
         if (this.state.username === '' || this.state.password === '') {
             this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
@@ -81,6 +81,7 @@ class Login extends Component {
         else {
             this.setState({isLogin:true})
             sessionStorage.setItem('access_token',access_token)
+            sessionStorage.setItem(   "user_id" ,user_id)
         }
 
     }

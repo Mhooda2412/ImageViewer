@@ -7,9 +7,9 @@ import Controller from './screens/Controller';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
+  
     <div><Controller></Controller></div>
-  </React.StrictMode>,
+  ,
   document.getElementById('root')
 );
 
