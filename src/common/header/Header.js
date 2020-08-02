@@ -105,9 +105,7 @@ class Header extends Component {
     redirectToLogin = () => {
         if (!this.state.isLogin) {
            return <Redirect to = "/"/>
-        }/* else{
-            return <Redirect to="/home"></Redirect>
-        } */
+        }
     }
 
     render() {
