@@ -260,7 +260,7 @@ addCommentHandler = () => {
   render() {
     const { classes } = this.props;
     let selectedImage = this.state.selectedImage;
-    console.log(this.state)
+    
     return (
 
       <div>
