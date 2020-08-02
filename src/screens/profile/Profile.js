@@ -22,7 +22,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import IconButton from '@material-ui/core/IconButton'
 
-
+// Custom Styles to over ride material ui default styles
 const styles = (theme) => ({
   editIcon: {
     marginLeft: '2%',
@@ -165,7 +165,7 @@ class Profile extends Component {
 
   }
 
-
+// Sets state of modalIsOpen to true to open the modal when EditIcon is clicked
 
   userNameEditHandler = () => {
     this.setState({
@@ -174,15 +174,19 @@ class Profile extends Component {
       nameUpdateModalIsOpen: true
     });
   };
-
+// Sets modalIsOpen to false to close the modal
   closeModalHandler = () => {
     this.setState({ nameUpdateModalIsOpen: false, imageModalIsOpen: false });
   };
 
+// Stores User input for full name in the newName state variable
 
   fullNameChangeHandler = (event) => {
   this.setState({modifiedFullName: event.target.value})
 };
+
+// On click of the update button, the name input by the user is saved to fullname and displayed. If Update buttin is clicked
+    // without providing the input, care is taken to prompt the user that it is a required field is you want to update.
 
 updateFullNameClickHandler = () => {
   if (this.state.modifiedFullName === '') {
@@ -194,11 +198,11 @@ updateFullNameClickHandler = () => {
     });
   }
 };
-
+ // Sets the clicked image details in the state variable
 gridImageClickHandler = (image)=>{
     this.setState({selectedImage: image, imageModalIsOpen: true})
 }
-
+// Handles liking of a Post
 likeBtnHandler = (imageId) => {
     let imageArr = this.state.images
     for (let i = 0; i < imageArr.length; i++) {
@@ -223,6 +227,8 @@ likeBtnHandler = (imageId) => {
     }
 
 }
+
+// Handles adding of comments to an image
 
 commentTextChangeHandler = (event, imageId) => {
     let comment = {
@@ -260,7 +266,7 @@ addCommentHandler = () => {
   render() {
     const { classes } = this.props;
     let selectedImage = this.state.selectedImage;
-    
+
     return (
 
       <div>

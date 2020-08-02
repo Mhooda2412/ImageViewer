@@ -50,15 +50,28 @@ class Login extends Component {
         }
     }
 
+    /**
+     * Function that handles any changes in the username field and updates state accordingly
+     */
+
     usernameChangeHandler = (e) => {
         this.setState({ username: e.target.value })
     }
+
+    /**
+     * Function that handles any changes in the password field and updates state accordingly
+     */
 
     passwordChangeHandler = (e) => {
         this.setState({ password: e.target.value })
     }
 
+    /**
+         * Function that handles what happens when we click the login button
+         */
     loginClickHandler = () => {
+
+      //Setting credentials in the login handler
 
         let username = "Mhooda2412"
         let password = "MHooda123"
@@ -66,6 +79,7 @@ class Login extends Component {
         let user_id = '17841439211805628'
 
         if (this.state.username === '' || this.state.password === '') {
+           // The usernameRequired and passwordRequired fields are used when we want to store the class to be assigned
             this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
             this.state.password === "" ? this.setState({ passwordRequired: "dispBlock" }) : this.setState({ passwordRequired: "dispNone" });
             this.setState({ incorrectUsernamePassword: 'dispNone' })
@@ -73,12 +87,15 @@ class Login extends Component {
 
         else if (username !== this.state.username || password !== this.state.password) {
             return this.setState({
+               // In case the username and password are incorrect
                 incorrectUsernamePassword: 'dispBlock',
                 usernameRequired: 'dispNone',
                 passwordRequired: 'dispNone'
             })
         }
         else {
+          // Setting token in session storage
+          // Setting state so as to check and route to home page if login is successful.
             this.setState({isLogin:true})
             sessionStorage.setItem('access_token',access_token)
             sessionStorage.setItem(   "user_id" ,user_id)
@@ -114,7 +131,7 @@ class Login extends Component {
                 </Card>
             </div>}
             </div>
-            
+
         )
     }
 }

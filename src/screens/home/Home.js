@@ -20,17 +20,18 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles';
 
+// Custom Styles to over ride material ui default styles
 const styles = (theme) => ({
-    root: { //style for the root 
+    root: { //style for the root
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper
     },
-    grid: { //style for the grid component 
+    grid: { //style for the grid component
         padding: "20px",
         "margin-left": "10%",
         "margin-right": "10%",
     },
-    card: { //style for the card component 
+    card: { //style for the card component
         maxWidth: "100%",
     },
     media: { // style for the image in the card
@@ -38,19 +39,19 @@ const styles = (theme) => ({
         //width: "100%",
         paddingTop: '56.25%', // 16:9
     },
-    avatar: { //style for the avatar in the card header 
+    avatar: { //style for the avatar in the card header
 
         margin: 10,
         width: 60,
         height: 60,
     },
-    title: { //Style for the title of the card 
+    title: { //Style for the title of the card
         'font-weight': '600',
     },
     likeButton: {
         'padding-left': '0px'
     },
-    addCommentBtn: { // ADD button styling 
+    addCommentBtn: { // ADD button styling
         "margin-left": "15px",
     },
 
@@ -60,7 +61,7 @@ const styles = (theme) => ({
         "align-items": "baseline",
         "justify-content": "center",
     },
-    commentUsername: {
+    commentUsername: { //style for the userName of the comment
         fontSize: 'inherit'
     }
 })
@@ -83,10 +84,14 @@ class Home extends Component {
         }
     }
 
+    //this method generat like  as instagram API no longer provide likes on a picture
     randomLikeGenerator() {
         return Math.floor(Math.random() * 10) + 1
     }
 
+    // As per the warning UNSAFE_ is prefixed before componentWillMount method
+    // In this method all the api will be called before the component is show,
+    // the rendering will occur once all the initial state are set
     UNSAFE_componentWillMount() {
 
         let that = this
@@ -142,7 +147,11 @@ class Home extends Component {
 
         }
     }
-
+    // This Handles when the like button is clicked.
+    //The like button is favorite icon
+    // when the like button is clicked the corresponding imageId is passed,
+    //which is iterated over a loop to find the images and the boolean value of user_has_liked is changed to false
+    //The likes count is either increased or decreased based on the previous state of user_has_liked
     likeBtnHandler = (imageId) => {
         let imageArr = this.state.images
         for (let i = 0; i < imageArr.length; i++) {
@@ -168,6 +177,10 @@ class Home extends Component {
 
     }
 
+    //Method used to handle changes in the comment input text
+   //This method takes the imageId as one parameter which is added to comment object and then updates the commentText state
+   //ImageId is given so that the comment input line of active card only shows the input text given.
+
     commentTextChangeHandler = (event, imageId) => {
         let comment = {
             id: imageId,
@@ -180,6 +193,11 @@ class Home extends Component {
 
 
     }
+    //This method is to handle the ADD button beside the comment text box
+    //Count is to keep key unique for every comment added
+    //username is to keep the username if the user commented
+    //Comments are stored in the comment array controlled by state
+    //Once the comment is pushed to the state comment array commentText is made empty so that comment input box returns to empty line
 
     addCommentHandler = () => {
         let count = this.state.commentCount
@@ -199,7 +217,12 @@ class Home extends Component {
 
 
     }
-
+    //This method is called from the header,this is passed as a props to the header
+    //Method handles when search input is changed
+    //The method takes the keyword checks with the caption and the images is updated with caption matching with keyword,
+    //thus triggering render and only showing those images
+    //The method maintains the original data in the controlled state using originalImageArr until the searchON is true
+    //Once the search is complete or search input value is ""then the images is set to originalImageArr rendering back to original state
     captionSearchHandler = (keyword)=>{
         if(!(keyword==='')){
             let originalImageArr = []
@@ -238,7 +261,7 @@ class Home extends Component {
     render() {
 
         const { classes } = this.props
-       
+
         return (
             <div >
                 <Header showSearchBox={this.state.isLogin ? true : false} showProfileIcon={this.state.isLogin ? true : false} showMyAccount={this.state.isLogin ? true : false} captionSearchHandler={this.captionSearchHandler} />

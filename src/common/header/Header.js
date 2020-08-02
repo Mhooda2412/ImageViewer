@@ -15,12 +15,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { Link , Redirect } from 'react-router-dom';
 
 
-
+// Custom Styles to over ride material ui default styles
 const styles = (theme) => ({
     root: {
         display: 'flex',
         width: '110px',
-        
+
     },
     paper: {
         marginRight: theme.spacing(2),
@@ -57,7 +57,7 @@ const styles = (theme) => ({
         "text-decoration-underline": "none",
         marginRight: '0px',
         paddingRight: '0px',
-        
+
     }
 
 })
@@ -75,11 +75,11 @@ class Header extends Component {
 
         this.anchorRef = React.createRef(false)
     }
-
+     //This method is called when the profile icon is clicked to open the menu
     profileIconClickHandler = () => {
         this.state.isMenuOpen ? this.setState({ isMenuOpen: false }) : this.setState({ isMenuOpen: true })
     }
-
+    // This method handle the close action of menu
     handleClose = (event) => {
         if (this.anchorRef.current && this.anchorRef.current.contains(event.target)) {
             return;
@@ -87,21 +87,25 @@ class Header extends Component {
 
         this.profileIconClickHandler()
     }
-
+    // This method is called when text is entered into search input,
+    //this inturn calls method captionSearchHandler of Home component and passes the text entered in the search input
     searchChangeHandler = (event)=>{
-                
+
                 this.props.captionSearchHandler(event.target.value)
 
     }
 
+    //This method is called when log out is clicked in the menu
+    //The method clears the session deatils like access-token , user_id and changes the logged to false
     logoutButtonHandler = ()=>{
         sessionStorage.removeItem("access_token")
         sessionStorage.removeItem("user_id")
         this.setState({
             isLogin:false
         })
-    } 
+    }
 
+ // This is called everytime the page renders so that to check if the user is not logged to redirect to login page
     redirectToLogin = () => {
         if (!this.state.isLogin) {
            return <Redirect to = "/"/>
@@ -109,23 +113,22 @@ class Header extends Component {
     }
 
     render() {
-
+      //custom Styles are stored in classes
         const { classes } = this.props
 
         return (
 
-
-
             <div>
+            {/* this is called everytime the page reloads to check if the user is logged out if yes the redirects to login page */}
                 {this.redirectToLogin()}
                 <header className="app-header">
                     <div className="app-logo">Image Viewer</div>
-                    {this.props.showSearchBox ?
+                    {this.props.showSearchBox ?  //checking if the showSearchBox is true,only then it is shown
                         <div className="header-searchbox">
                             <SearchIcon id="search-icon"></SearchIcon>
                             <Input placeholder="Search…" disableUnderline={true} onChange={this.searchChangeHandler}></Input>
                         </div> : <div className="header-searchbox-off"></div>}
-                    {this.props.showProfileIcon ?
+                    {this.props.showProfileIcon ?  // checking if the showSearchBox is true,only then it is shown
                         <div>
                             <IconButton className={classes.profileIcon} onClick={this.profileIconClickHandler} ref={this.anchorRef} aria-controls={this.state.isMenuOpen ? 'menu-list' : undefined} aria-haspopup="true" >
                                 <img src={profileImage} alt='profile pic' className={classes.profileImage}></img>
