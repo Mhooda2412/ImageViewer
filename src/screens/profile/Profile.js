@@ -14,13 +14,35 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import CardHeader from '@material-ui/core/CardHeader'
+import Avatar from '@material-ui/core/Avatar'
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import IconButton from '@material-ui/core/IconButton'
+
 
 const styles = (theme) => ({
   editIcon: {
     marginLeft: '2%',
     width: '40px',
     height: '40px'
-  }
+  },
+  boldFont: {
+  "font-weight": 600
+},
+fav: {
+  padding: 0
+},
+cardHeader: {
+  padding: '0 0 10px 10px'
+},
+addComment: {
+   display: "flex",
+   flexDirection: "row",
+   alignItems: "baseline"
+ }
 })
 
 
@@ -33,7 +55,17 @@ const TabContainer = function (props) {
 };
 
 
-
+const imageModalStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    transform: 'translate(-50%, -50%)',
+    width: '60vw',
+    height: '40vw'
+  }
+};
 
 const customStyles = {
   content: {
@@ -57,6 +89,12 @@ class Profile extends Component {
       nameUpdateModalIsOpen: false,
       modifiedFullName: '',
       modifiedFullNameRequired: 'dispNone',
+      images:[],
+      selectedImage:{},
+      imageModalIsOpen: false,
+      comments: [],
+      comment: "",
+      commentCount: 1
     }
   }
 
@@ -68,7 +106,7 @@ class Profile extends Component {
     return Math.floor(Math.random() * 10) + 1
   }
 
-  componentDidMount() {
+  UNSAFE_componentWillMount() {
 
     let that = this
     if (this.state.isLogin) {
@@ -156,8 +194,73 @@ updateFullNameClickHandler = () => {
     });
   }
 };
+
+gridImageClickHandler = (image)=>{
+    this.setState({selectedImage: image, imageModalIsOpen: true})
+}
+
+likeBtnHandler = (imageId) => {
+    let imageArr = this.state.images
+    for (let i = 0; i < imageArr.length; i++) {
+        if (imageArr[i].id === imageId) {
+            if (imageArr[i].isLiked === true) {
+                imageArr[i].isLiked = false
+                imageArr[i].likes--
+                this.setState({
+                    images: imageArr
+                })
+                break
+            }
+            else {
+                imageArr[i].isLiked = true
+                imageArr[i].likes++
+                this.setState({
+                    images: imageArr
+                })
+                break
+            }
+        }
+    }
+
+}
+
+commentTextChangeHandler = (event, imageId) => {
+    let comment = {
+        id: imageId,
+        commentText: event.target.value
+    }
+    this.setState({
+        comment
+    })
+
+
+
+}
+
+addCommentHandler = () => {
+    let count = this.state.commentCount
+    let comment = {
+        id: count,
+        imageId: this.state.comment.id,
+        username: this.state.username,
+        commentText: this.state.comment.commentText
+    }
+    count++
+    let comments = [...this.state.comments, comment]
+    this.setState({
+        comments,
+        commentCount:count,
+        comment: ""
+    })
+
+
+}
+
+
   render() {
     const { classes } = this.props;
+    let selectedImage = this.state.selectedImage;
+    console.log(this.state)
     return (
 
       <div>
@@ -206,6 +309,90 @@ updateFullNameClickHandler = () => {
                 onClick={this.updateFullNameClickHandler}>Update</Button>
                 </Modal>
             </div>
+          </div>
+          <div className='images-grid-list'>
+            <GridList cellHeight={300} cols={3} className="grid-list-main">
+              {this.state.images.map(img=>(
+                <GridListTile key={img.id} onClick={()=>this.gridImageClickHandler(img)}>
+                <img src={img.media_url} alt={'image'+ img.id}/>
+                </GridListTile>
+              ))}
+            </GridList>
+            <Modal ariaHideApp={false} isOpen={this.state.imageModalIsOpen}
+                     contentLabel="view" onRequestClose={this.closeModalHandler}
+                     style={imageModalStyles}>
+                     {selectedImage.id &&
+                       <div>
+                        <div className='image-section'>
+                          <img src={selectedImage.media_url} className="image-post" alt={selectedImage.id} ></img>
+                        </div>
+                        <div className="right-section">
+                          <CardHeader className={classes.cardHeader}
+                           classes={{title: classes.boldFont}}
+                           avatar={
+                             <Avatar src={profileImage}></Avatar>
+                           }
+                           title={this.state.username}>
+                           >
+
+                           </CardHeader>
+                           <hr/>
+                           <div className='content'>
+                           <Typography className={classes.boldFont}>
+                           {selectedImage.caption[0]}
+                           </Typography>
+                           <Typography className='image-hash-tag'>
+                           {selectedImage.caption[1]}
+                           </Typography>
+                           </div>
+                           <div className='comments-section'>
+                           {this.state.comments.map(comment => (
+                               selectedImage.id === comment.imageId ? <div className="comment-display" key={"comment"+comment.id}>
+                                   <Typography className='comment-username' style={{fontWeight:'bold'}} >
+                                       {comment.username}:
+                               </Typography>
+                                   <Typography  className="comment-text" >
+                                       {comment.commentText}
+                                   </Typography>
+                               </div>
+                                   : ""
+                           ))}
+
+                           </div>
+                            <div className="likes-add-comment-section">
+                            <IconButton className={classes.fav} aria-label="like-button" onClick={() => this.likeBtnHandler(selectedImage.id)}>
+                                {selectedImage.isLiked ? <FavoriteIcon fontSize="large" style={{ color: 'red' }}></FavoriteIcon> : <FavoriteBorderIcon fontSize='large'></FavoriteBorderIcon>}
+                            </IconButton>
+                            <Typography className='likes-count'>
+                            {selectedImage.likes === 1 ?
+                                <span >
+                                    {selectedImage.likes} like
+                                    </span>
+                                : <span>
+                                    {selectedImage.likes} likes
+                                    </span>
+                            }
+                            </Typography>
+                            <div className="add-comments-section">
+                          <FormControl className={classes.addComment}>
+                            <InputLabel htmlFor="comments">Add a
+                              comment</InputLabel>
+                            <Input id={"comments" + selectedImage.id}
+                                   className="comments-input"
+                                   onChange={(event) => this.commentTextChangeHandler(
+                                       event, selectedImage.id)}
+                                   value={selectedImage.commentText}/>
+                            <Button variant="contained" color="primary"
+                                    onClick={this.addCommentHandler.bind(this)}>ADD</Button>
+                          </FormControl>
+                        </div>
+
+                            </div>
+
+                        </div>
+                       </div>
+                     }
+            </Modal>
           </div>
         </div>
 
